@@ -15,7 +15,7 @@ def exit(_:list[str]):
 def import_file(arguments:list[str]):
     alias = arguments[0]
     path = arguments[1]
-    df = pd.read_csv(path)
+    df = pd.read_csv(path,dtype=str) #TODO: I set the dtype as str in order to match numeric values in the filter_print function.
     dataframes[alias] = df
 
 def merge_left(arguments:list[str]):
@@ -50,7 +50,8 @@ def show_cols(arguments:list[str]):
     print(df.columns.values)
 
 def filter_print(arguments:list[str]):
-    alias,col,condition = arguments
+    alias= arguments[0]
     df = dataframes[alias]
-    # print(df[col])
-    print(df.loc[df[col]==condition])
+    for i in range(1, len(arguments[1:]), 2):
+        df = df.loc[df[arguments[i]]==arguments[i+1]]
+    print(df)
