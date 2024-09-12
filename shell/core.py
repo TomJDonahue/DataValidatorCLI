@@ -1,57 +1,48 @@
 import pandas as pd
-from time import sleep
+from shell.commands import exit,import_file,merge_left,show_files,show_cols,filter_print,show_data,help,drop_file
+
+def parse_commands(commands:str) -> tuple[str, list[str]]:
+    split_commands = commands.split()
+    command = split_commands[0]
+    arguments = [args for args in split_commands[1:] if args != '']
+    print(f'Debug(parse_commands): Arguments: {arguments}')
+
+    if arguments and arguments[0] == '-h':
+        return 'help',['command']
+
+    return command, arguments
 
 
-dataframes = {
-
+commands = {
+    'merge': merge_left,
+    'exit': exit,
+    'import':import_file,
+    'files': show_files,
+    'cols': show_cols,
+    'filter_print': filter_print,
+    'data': show_data,
+    'help':help,
+    'drop':drop_file
 }
 
-def exit(_:list[str]):
-    for mark in ['.','..','...']:
-        print(mark)
-        sleep(.5)
-    quit()
-
-def import_file(arguments:list[str]):
-    alias = arguments[0]
-    path = arguments[1]
-    df = pd.read_csv(path,dtype=str) #TODO: I set the dtype as str in order to match numeric values in the filter_print function.
-    dataframes[alias] = df
-
-def merge_left(arguments:list[str]):
-    file1,file2,on,alias = arguments[0:4]
-    if len(arguments) > 4:
-        cols = arguments[4:]
-        cols.append(on)
+def execute_command(command:str,args:list[str]):
+    if command in commands:
+        try:
+            commands[command](args)
+        except ValueError:
+            print("Incorrect Arguments Provided!")
+        # except Exception:
+        #     print(Exception)
+        #     print("Error with command, please try again.")
+        finally:
+            print('')
     else:
-        cols = list(dataframes[file2].columns.values)
-        print(cols)
+        print("Command not recognized")
+        print('')
 
-    suffixes = (None,'_duplicate')
+def run_shell():
+    while True:
+        user_input = input("tell me what you want ")
 
-    file = pd.merge(dataframes[file1],dataframes[file2][cols],how='left',on=on,suffixes=suffixes)
-    
-    cols = [col for col in file.columns if col.endswith("_duplicate")]
-    file.drop(columns=cols, inplace=True)
-    print(file)
-    dataframes[alias] = file
-
-def show_files(_:list[str]):
-    if len(dataframes) == 0:
-        print("No files currently stored.")
-    else:   
-        print("Files presently stored:")
-        for file in dataframes:
-            print(f'Alias: {file}')
-
-def show_cols(arguments:list[str]):
-    alias = arguments[0]
-    df = dataframes[alias]
-    print(df.columns.values)
-
-def filter_print(arguments:list[str]):
-    alias= arguments[0]
-    df = dataframes[alias]
-    for i in range(1, len(arguments[1:]), 2):
-        df = df.loc[df[arguments[i]]==arguments[i+1]]
-    print(df)
+        command, args = parse_commands(user_input)
+        execute_command(command,args)
