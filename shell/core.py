@@ -8,7 +8,7 @@ def parse_commands(commands:str) -> tuple[str, list[str]]:
     print(f'Debug(parse_commands): Arguments: {arguments}')
 
     if arguments and arguments[0] == '-h':
-        return 'help',['command']
+        return 'help',[command]
 
     return command, arguments
 

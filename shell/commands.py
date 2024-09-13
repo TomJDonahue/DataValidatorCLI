@@ -1,5 +1,6 @@
 import pandas as pd
 from time import sleep
+from shell.docs import MERGE_LEFT
 
 Command = list[str]
 
@@ -14,30 +15,33 @@ def exit(_:Command):
     quit()
 
 def help(arguments:Command):
-    print('help command')
+    print(arguments)
+    if arguments[0] == 'merge':
+        print(MERGE_LEFT)
 
 def import_file(arguments:Command):
-    assert len(arguments) == 2
     alias = arguments[0]
     path = arguments[1]
     df = pd.read_csv(path,dtype=str) #TODO: I set the dtype as str in order to match numeric values in the filter_print function.
     dataframes[alias] = df
 
 def merge_left(arguments:Command):
-    file1,file2,on,alias = arguments[0:4]
-    if len(arguments) > 4:
-        cols = arguments[4:]
-        cols.append(on)
+    if len(arguments) < 5:
+        raise ValueError
+    file1,file2,left_on,right_on,alias = arguments[0:5]
+    if len(arguments) > 5:
+        cols = arguments[5:]
+        cols.append(right_on)
     else:
         cols = list(dataframes[file2].columns.values)
         print(cols)
 
     suffixes = (None,'_duplicate')
 
-    file = pd.merge(dataframes[file1],dataframes[file2][cols],how='left',on=on,suffixes=suffixes)
+    file = pd.merge(dataframes[file1],dataframes[file2][cols],how='left',left_on=left_on,right_on=right_on,suffixes=suffixes)
     
-    cols = [col for col in file.columns if col.endswith("_duplicate")]
-    file.drop(columns=cols, inplace=True)
+    drop_cols = [col for col in file.columns if col.endswith("_duplicate")]
+    file.drop(columns=drop_cols, inplace=True)
     print(file)
     dataframes[alias] = file
 
@@ -63,7 +67,7 @@ def show_data(arguments:Command):
         print(dataframes[alias])
     
 def filter_print(arguments:Command):
-    alias= arguments[0]
+    alias = arguments[0]
     df = dataframes[alias]
     for i in range(1, len(arguments[1:]), 2):
         df = df.loc[df[arguments[i]]==arguments[i+1]]
