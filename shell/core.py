@@ -1,5 +1,5 @@
 import pandas as pd
-from shell.commands import exit,import_file,merge_left,show_files,show_cols,filter_print,show_data,help,drop_file
+from shell.commands import ExitCommand, ImportCommand, MergeCommand, FilterPrintCommand
 
 def parse_commands(commands:str) -> tuple[str, list[str]]:
     split_commands = commands.split()
@@ -14,21 +14,24 @@ def parse_commands(commands:str) -> tuple[str, list[str]]:
 
 
 commands = {
-    'merge': merge_left,
-    'exit': exit,
-    'import':import_file,
-    'files': show_files,
-    'cols': show_cols,
-    'filter_print': filter_print,
-    'data': show_data,
-    'help':help,
-    'drop':drop_file
+    'merge': MergeCommand,
+    'exit': ExitCommand,
+    # 'files': show_files,
+    # 'cols': show_cols,
+    'filter_print': FilterPrintCommand,
+    # 'data': show_data,
+    # 'help':help,
+    # 'drop':drop_file
+    'import': ImportCommand
 }
 
 def execute_command(command:str,args:list[str]):
     if command in commands:
         try:
-            commands[command](args)
+            if commands[command].validate_args(args):
+                commands[command].execute(args)
+            else:
+                print("Validation Failed")
         except ValueError:
             print("Incorrect Arguments Provided!")
         # except Exception:
@@ -43,6 +46,7 @@ def execute_command(command:str,args:list[str]):
 def run_shell():
     while True:
         user_input = input("tell me what you want ")
-
+        if user_input == "T":
+            quit()
         command, args = parse_commands(user_input)
         execute_command(command,args)
