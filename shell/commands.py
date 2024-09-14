@@ -64,7 +64,7 @@ class ImportCommand():
     def help():
         ... 
 
-class MergeCommand(Protocol):
+class MergeCommand():
     @staticmethod
     def validate_args(args:list[str]):
         # Confirm there are enough arguments provided
@@ -116,7 +116,7 @@ class MergeCommand(Protocol):
     def help():
         ... 
 
-class ShowFilesCommand(Protocol):
+class ShowFilesCommand():
     @staticmethod
     def validate_args(_:list[str]):
         # Confirm whether there are any files stored in the dataframes dictionary
@@ -135,7 +135,7 @@ class ShowFilesCommand(Protocol):
     def help():
         ... 
 
-class FilterPrintCommand(Protocol):
+class FilterPrintCommand():
     @staticmethod
     def validate_args(args:list[str]):
         # Confirm the minimum number of arguments have been provided
@@ -163,24 +163,28 @@ class FilterPrintCommand(Protocol):
     def help():
         ... 
 
+class ShowColsCommand():
+    @staticmethod
+    def validate_args(args:list[str]):
+        # Confirm the minimum number of required arguments are passed.
+        if len(args) < 1:
+            return False
+        # Confirm the first arg is a file that exists in the dataframes dict
+        if args[0] not in dataframes:
+            return False
+        return True
+    
+    @staticmethod
+    def execute(args:list[str]):
+        print(dataframes[args[0]].columns.values)
+    
+    @staticmethod
+    def help():
+        ... 
 # def help(arguments:Command):
 #     print(arguments)
 #     if arguments[0] == 'merge':
 #         print(MERGE_LEFT)
-
-
-# def show_files(_:Command):
-#     if len(dataframes) == 0:
-#         print("No files currently stored.")
-#     else:   
-#         print("Files presently stored:")
-#         for file in dataframes:
-#             print(f'Alias: {file}')
-
-# def show_cols(arguments:Command):
-#     alias = arguments[0]
-#     df = dataframes[alias]
-#     print(df.columns.values)
 
 # def show_data(arguments:Command):
 #     alias = arguments[0]
