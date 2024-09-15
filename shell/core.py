@@ -1,5 +1,5 @@
 import pandas as pd
-from shell.commands import ExitCommand, ImportCommand, MergeCommand, FilterPrintCommand,ShowColsCommand,ShowFilesCommand
+from shell.commands import commands, ExitCommand,ImportCommand,MergeCommand,FilterPrintCommand,ShowColsCommand,ShowFilesCommand,ShowDataCommand,DropFileCommand
 
 def parse_commands(commands:str) -> tuple[str, list[str]]:
     split_commands = commands.split()
@@ -12,18 +12,6 @@ def parse_commands(commands:str) -> tuple[str, list[str]]:
 
     return command, arguments
 
-
-commands = {
-    'merge': MergeCommand,
-    'exit': ExitCommand,
-    'files': ShowFilesCommand,
-    'cols': ShowColsCommand,
-    'filter_print': FilterPrintCommand,
-    # 'data': show_data,
-    # 'help':help,
-    # 'drop':drop_file
-    'import': ImportCommand
-}
 
 def execute_command(command:str,args:list[str]):
     if command in commands:

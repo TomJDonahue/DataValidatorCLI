@@ -1,12 +1,8 @@
 import pandas as pd
 from time import sleep
-from shell.docs import MERGE_LEFT
+import shell.docs as docs
 from typing import Protocol
 from os.path import isfile
-
-dataframes = {
-
-}
 
 class Command(Protocol):
     @staticmethod
@@ -21,7 +17,7 @@ class Command(Protocol):
     def help():
         ... 
 
-class ExitCommand():
+class ExitCommand:
     @staticmethod
     def validate_args(_:list[str]):
         return True
@@ -37,7 +33,7 @@ class ExitCommand():
     def help():
         ... 
 
-class ImportCommand():
+class ImportCommand:
     @staticmethod
     def validate_args(args:list[str]):
         # Confirm the correct number of arguments are passed
@@ -64,7 +60,7 @@ class ImportCommand():
     def help():
         ... 
 
-class MergeCommand():
+class MergeCommand:
     @staticmethod
     def validate_args(args:list[str]):
         # Confirm there are enough arguments provided
@@ -114,9 +110,9 @@ class MergeCommand():
     
     @staticmethod
     def help():
-        ... 
+        print(docs.MERGE_LEFT)
 
-class ShowFilesCommand():
+class ShowFilesCommand:
     @staticmethod
     def validate_args(_:list[str]):
         # Confirm whether there are any files stored in the dataframes dictionary
@@ -135,7 +131,7 @@ class ShowFilesCommand():
     def help():
         ... 
 
-class FilterPrintCommand():
+class FilterPrintCommand:
     @staticmethod
     def validate_args(args:list[str]):
         # Confirm the minimum number of arguments have been provided
@@ -163,7 +159,7 @@ class FilterPrintCommand():
     def help():
         ... 
 
-class ShowColsCommand():
+class ShowColsCommand:
     @staticmethod
     def validate_args(args:list[str]):
         # Confirm the minimum number of required arguments are passed.
@@ -181,25 +177,89 @@ class ShowColsCommand():
     @staticmethod
     def help():
         ... 
-# def help(arguments:Command):
-#     print(arguments)
-#     if arguments[0] == 'merge':
-#         print(MERGE_LEFT)
 
-# def show_data(arguments:Command):
-#     alias = arguments[0]
-#     if len(arguments) > 1:
-#         head =  int(arguments[1])
-#         print(dataframes[alias].head(head))
-#     else:
-#         print(dataframes[alias])
+class ShowDataCommand:
+    @staticmethod
+    def validate_args(args:list[str]):
+        # Confirm the minimum number of arguments are passed
+        if len(args) < 1:
+            return False
+        # Confirm the file is present in the dataframes dict.
+        if args[0] not in dataframes:
+            return False
+        # If a second argument is provided, confirm that it can be converted to a number
+        if len(args) > 1 and not args[1].isnumeric():
+            print('failed!')
+            return False
+        return True
+    
+    @staticmethod
+    def execute(args:list[str]):
+        alias = args[0]
+        if len(args) > 1:
+            head =  int(args[1])
+            print(dataframes[alias].head(head))
+        else:
+            print(dataframes[alias])
+    
+    @staticmethod
+    def help():
+        ... 
 
-# def drop_file(arguments:Command):
-#     print('before')
-#     print(dataframes)
+class DropFileCommand:
+    @staticmethod
+    def validate_args(args:list[str]):
+        # Confirm the minimum number of arguments are provided
+        if len(args) < 1:
+            return False
+        # Confirm that the file exists in the dataframes
+        if args[0] not in dataframes:
+            return False
+        return True
+    
+    
+    @staticmethod
+    def execute(args:list[str]):
+        print('before')
+        print(dataframes)
 
-#     alias = arguments[0]
-#     if alias in dataframes:
-#         dataframes.pop(alias)
-#     print('after')
-#     print(dataframes)
+        dataframes.pop(args[0])
+        print('after')
+        print(dataframes)
+    
+    @staticmethod
+    def help():
+        ... 
+
+class HelpCommand:
+    @staticmethod
+    def validate_args(args:list[str]):
+        if len(args) < 1:
+            return False
+        if args[0] not in commands:
+            return False
+        return True
+    
+    @staticmethod
+    def execute(args:list[str]):
+        commands[args[0]].help()
+
+    @staticmethod
+    def help():
+        ... 
+
+dataframes = {
+
+}
+
+commands = {
+    'merge': MergeCommand,
+    'exit': ExitCommand,
+    'files': ShowFilesCommand,
+    'cols': ShowColsCommand,
+    'filter_print': FilterPrintCommand,
+    'data': ShowDataCommand,
+    'help':HelpCommand,
+    'drop':DropFileCommand,
+    'import': ImportCommand
+}

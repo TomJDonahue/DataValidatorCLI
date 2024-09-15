@@ -9,3 +9,9 @@ Arguments:
     Output File: The resulting output file. This file will be accessible to the CLI using this alias.
     Columns (Optional): The columns from File 2 that will be pulled into File 1. 
         If left blank, all columns from File 2 will be pulled into File 1'''
+
+IMPORT = '''
+Operation: Loads a file from a directory into the application and stores it as a dataframe
+Command: import
+Arguments:
+'''
