@@ -234,19 +234,20 @@ class DropFileCommand:
 class HelpCommand:
     @staticmethod
     def validate_args(args:list[str]):
-        if len(args) < 1:
-            return False
-        if args[0] not in commands:
+        if args and args[0] not in commands:
             return False
         return True
     
     @staticmethod
     def execute(args:list[str]):
+        if len(args) == 0:
+            help()
+            return
         commands[args[0]].help()
 
     @staticmethod
     def help():
-        ... 
+        print("HELP!!!!!!!!")
 
 dataframes = {
 
@@ -259,7 +260,7 @@ commands = {
     'cols': ShowColsCommand,
     'filter_print': FilterPrintCommand,
     'data': ShowDataCommand,
-    'help':HelpCommand,
+    '--help':HelpCommand,
     'drop':DropFileCommand,
     'import': ImportCommand
 }

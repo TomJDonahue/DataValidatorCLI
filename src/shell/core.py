@@ -22,6 +22,8 @@ def execute_command(command:str,args:list[str]):
                 print("Validation Failed")
         except ValueError:
             print("Incorrect Arguments Provided!")
+        except KeyboardInterrupt:
+            quit()
         # except Exception:
         #     print(Exception)
         #     print("Error with command, please try again.")
