@@ -1,5 +1,4 @@
-import pandas as pd
-from src.shell.commands import commands
+from src.shell.config import commands
 
 
 def parse_commands(commands: str) -> tuple[str, list[str]]:
@@ -9,9 +8,15 @@ def parse_commands(commands: str) -> tuple[str, list[str]]:
     print(f'Debug(parse_commands): Arguments: {arguments}')
 
     if arguments and arguments[0] == '-h':
-        return 'help', [command]
+        return commands, ['-h']
 
     return command, arguments
+
+
+def validate_help(args: list[str]):
+    if len(args) > 0 and args[0] == '-h':
+        return True
+    return False
 
 
 def execute_command(command: str, args: list[str]):
@@ -38,7 +43,7 @@ def execute_command(command: str, args: list[str]):
 def run_shell():
     while True:
         user_input = input("tell me what you want ")
-        if user_input == "T":
+        if user_input == "T":  # TODO: Remove this if block
             quit()
         command, args = parse_commands(user_input)
         execute_command(command, args)

@@ -2,7 +2,7 @@ import pandas as pd
 from time import sleep
 import src.shell.docs as docs
 from typing import Protocol
-from os.path import isfile
+from os.path import isfile, exists
 
 
 class Command(Protocol):
@@ -241,37 +241,46 @@ class DropFileCommand:
         ...
 
 
-class HelpCommand:
+class UpdatePathCommand:
     @staticmethod
     def validate_args(args: list[str]):
-        if args and args[0] not in commands:
+        # Confirm the minimum number of arguments are passed
+        if len(args) > 0:
+            return False
+        # Confirm the path exists
+        if not exists(args[0]):
             return False
         return True
 
     @staticmethod
     def execute(args: list[str]):
-        if len(args) == 0:
-            help()
-            return
-        commands[args[0]].help()
+        ...
 
     @staticmethod
     def help():
-        print("HELP!!!!!!!!")
+        ...
+
+
+class HelpCommand:
+    # @staticmethod
+    # def validate_args(args: list[str]):
+    #     if args and args[0] not in commands:
+    #         return False
+    #     return True
+
+    # @staticmethod
+    # def execute(args: list[str]):
+    #     if len(args) == 0:
+    #         help()
+    #         return
+    #     # commands[args[0]].help()
+
+    # @staticmethod
+    # def help():
+    #     print("HELP!!!!!!!!")
+    ...
 
 
 dataframes = {
 
-}
-
-commands = {
-    'merge': MergeCommand,
-    'exit': ExitCommand,
-    'files': ShowFilesCommand,
-    'cols': ShowColsCommand,
-    'filter_print': FilterPrintCommand,
-    'data': ShowDataCommand,
-    '--help': HelpCommand,
-    'drop': DropFileCommand,
-    'import': ImportCommand
 }
