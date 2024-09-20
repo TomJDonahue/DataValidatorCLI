@@ -1,14 +1,19 @@
 from src.shell.config import commands
+from src.commands.merge import MergeCommandArgs
+from src.commands.command_base import CommandArgs,Command
+from src.data.dictionary import dataframes
+from src.commands.factory import generate_cmd_and_args
 
 
-def parse_commands(commands: str) -> tuple[str, list[str]]:
+def parse_commands(commands: str) -> tuple[Command, CommandArgs]:
     split_commands = commands.split()
     command = split_commands[0]
     arguments = [args for args in split_commands[1:] if args != '']
     print(f'Debug(parse_commands): Arguments: {arguments}')
-
-    if arguments and arguments[0] == '-h':
-        return commands, ['-h']
+    command,arguments = generate_cmd_and_args(command,arguments)
+# TODO incorporate Help
+    # if arguments and arguments[0] == '-h':
+    #     return commands, ['-h']
 
     return command, arguments
 
@@ -19,13 +24,10 @@ def validate_help(args: list[str]):
     return False
 
 
-def execute_command(command: str, args: list[str]):
+def execute_command(command: str, args: MergeCommandArgs):
     if command in commands:
         try:
-            if commands[command].validate_args(args):
-                commands[command].execute(args)
-            else:
-                print("Validation Failed")
+            commands[command].execute(args)
         except ValueError:
             print("Incorrect Arguments Provided!")
         except KeyboardInterrupt:
@@ -45,5 +47,6 @@ def run_shell():
         user_input = input("tell me what you want ")
         if user_input == "T":  # TODO: Remove this if block
             quit()
+
         command, args = parse_commands(user_input)
-        execute_command(command, args)
+        command.execute(args)

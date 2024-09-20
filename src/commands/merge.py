@@ -1,16 +1,18 @@
-from validations import value_exists_in_dataframes, cols_exists_in_dataframe
+from src.commands.validations import value_exists_in_dataframes, cols_exists_in_dataframe
 import pandas as pd
 from src.data.dictionary import dataframes
+from src.commands.command_base import CommandArgs,Command
 
+# TODO: This module still makes some direct calls to the dataframes dictionary. I want to abstract away from that.
+class MergeCommandArgs(CommandArgs):
 
-class MergeCommandArgs:
-
-    def __init__(self, file1, file2, left_on, right_on, *cols) -> None:
+    def __init__(self, file1, file2, left_on, right_on,alias, *cols) -> None:
         pass
         self.file1 = file1
         self.file2 = file2
         self.left_on = left_on
         self.right_on = right_on
+        self.alias = alias
         if cols == None:
             self.cols = []
         else:
@@ -43,8 +45,7 @@ class MergeCommandArgs:
     @ left_on.setter
     def left_on(self, value):
         if not cols_exists_in_dataframe(self.file1, value):
-            raise Exception(f"Left_on value {
-                            value} does not exist in {self.file1}")
+            raise Exception(f"Left_on value {value} does not exist in {self.file1}")
         self._left_on = value
 
     @ property
@@ -54,8 +55,7 @@ class MergeCommandArgs:
     @ right_on.setter
     def right_on(self, value):
         if not cols_exists_in_dataframe(self.file2, value):
-            raise Exception(f"Right_on value {
-                            value} does not exist in {self.file2}")
+            raise Exception(f"Right_on value {value} does not exist in {self.file2}")
         self._right_on = value
 
     @ property
@@ -73,18 +73,16 @@ class MergeCommandArgs:
     @ cols.setter
     def cols(self, value):
         if not cols_exists_in_dataframe(self.file2, *value):
-            raise Exception(f"One or more of the following 
-                            {value} does not exist in {self.file2}")
-        self._cols = value
+            raise Exception(f"One or more of the following {value} does not exist in {self.file2}")
+        self._cols = list(value)
 
     def __repr__(self) -> str:
-        return f'Merge Command Args: \nfile1: {self.file1} \nfile2: {self.file2} \nleft_on: {self.left_on} \nright_on: {self.right_on} \ncols: {self.cols}'
+        return f'Merge Command Args: \nfile1: {self.file1} \nfile2: {self.file2} \nleft_on: {self.left_on} \nright_on: {self.right_on} \nalias: {self.alias} \ncols: {self.cols}'
 
 
-class MergeCommand:
+class MergeCommand(Command):
 
-    @staticmethod
-    def execute(args: MergeCommandArgs):
+    def execute(self,args: MergeCommandArgs): #type: ignore #TODO: Let's see if this works
         file1, file2, left_on, right_on, alias = args.file1, args.file2, args.left_on, args.right_on, args.alias
         if len(args.cols) > 0:
             cols = args.cols

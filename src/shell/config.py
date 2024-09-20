@@ -1,6 +1,5 @@
 from os import getcwd
-from commands import (MergeCommand,
-                      ExitCommand,
+from src.shell.commands import (ExitCommand,
                       ShowFilesCommand,
                       ShowColsCommand,
                       FilterPrintCommand,
@@ -8,6 +7,7 @@ from commands import (MergeCommand,
                       HelpCommand,
                       DropFileCommand,
                       ImportCommand)
+from src.commands.merge import MergeCommand
 
 DEFAULT_DIRECTORY = getcwd()
 
