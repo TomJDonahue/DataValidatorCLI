@@ -1,9 +1,10 @@
 from src.shell.core import run_shell
-import pandas as pd
-from src.data.dictionary import dataframes
+import pandas as pd  # TODO: Remove This
+from src.data.dictionary import dataframes  # TODO: Remove This
 
 if __name__ == "__main__":
-    dataframes['file1'] = pd.read_csv('file1.csv')
-    dataframes['file2'] = pd.read_csv('file2.csv')
+    # TODO: This is just for ease of testing
+    dataframes['file4'] = pd.read_csv('file1.csv')
+    dataframes['file5'] = pd.read_csv('file2.csv')
 
     run_shell()

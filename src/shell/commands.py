@@ -1,8 +1,6 @@
-import pandas as pd
 from time import sleep
-import src.shell.docs as docs
 from typing import Protocol
-from os.path import isfile, exists
+from os.path import exists
 
 
 class Command(Protocol):
@@ -34,88 +32,6 @@ class ExitCommand:
     @staticmethod
     def help():
         ...
-
-
-class ImportCommand:
-    @staticmethod
-    def validate_args(args: list[str]):
-        # Confirm the correct number of arguments are passed
-        if len(args) != 2:
-            return False
-        # Confirm all arguments passed are strings
-        for arg in args:
-            if isinstance(arg, str) == False:
-                return False
-        # Confirm the second arg is a file that exists in the path.
-        if not isfile(args[1]):
-            return False
-        return True
-
-    @staticmethod
-    def execute(args: list[str]):
-        alias = args[0]
-        path = args[1]
-        # TODO: I set the dtype as str in order to match numeric values in the filter_print function.
-        df = pd.read_csv(path, dtype=str)
-        dataframes[alias] = df
-
-    @staticmethod
-    def help():
-        ...
-
-
-class MergeCommand:
-    @staticmethod
-    def validate_args(args: list[str]):
-        # Confirm there are enough arguments provided
-        if len(args) < 5:
-            print('not enough args')
-            return False
-        # First argument should be the left file and it should exist in the dataframes dictionary
-        if args[0] not in dataframes:
-            print('file1 not in dataframes')
-            return False
-        # Second argument should be the right file and it should exist in the dataframes dictionary
-        if args[1] not in dataframes:
-            print('file2 not in dataframes')
-            return False
-        # Third argument should be the ID column in the left file and should exist
-        if args[2] not in dataframes[args[0]].columns.values.tolist():
-            print('left_on not in file1')
-            return False
-        # Fourth argument should be the ID column in the right file and should exist
-        if args[3] not in dataframes[args[1]].columns.values.tolist():
-            print('right_on not in file2')
-            return False
-        # If there are arguments after the 4th, they should all be columns that exist in the right file
-        for arg in args[5:]:
-            if arg not in dataframes[args[1]].columns.values.tolist():
-                return False
-        return True
-
-    @staticmethod
-    def execute(args: list[str]):
-        file1, file2, left_on, right_on, alias = args[0:5]
-        if len(args) > 5:
-            cols = args[5:]
-            cols.append(right_on)
-        else:
-            cols = dataframes[file2].columns.values.tolist()
-            print(cols)
-
-        suffixes = (None, '_duplicate')
-
-        file = pd.merge(dataframes[file1], dataframes[file2][cols], how='left',
-                        left_on=left_on, right_on=right_on, suffixes=suffixes)
-
-        drop_cols = [col for col in file.columns if col.endswith("_duplicate")]
-        file.drop(columns=drop_cols, inplace=True)
-        print(file)
-        dataframes[alias] = file
-
-    @staticmethod
-    def help():
-        print(docs.MERGE_LEFT)
 
 
 class ShowFilesCommand:

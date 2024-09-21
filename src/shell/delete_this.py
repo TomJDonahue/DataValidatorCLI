@@ -16,7 +16,7 @@ datyframeys = {"file1": file,
 '''Arguments  '''
 
 
-def validate_all(validations: list[Validations], args: dict):
+def validate_all(validations: list[Validations], args: dict):  # type: ignore
     for validation in validations:
         task = validation.__name__
         print(f'running {task}')
@@ -28,5 +28,5 @@ def validate_all(validations: list[Validations], args: dict):
 
 
 class TestClass:
-    def __init__(self, args: CommandArgs) -> None:
+    def __init__(self, args: CommandArgs) -> None:  # type: ignore
         self.args = args
