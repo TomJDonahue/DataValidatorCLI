@@ -27,9 +27,9 @@ def run_shell():
         if user_input == "T":  # TODO: Remove this if block
             quit()
 
-        # try:
-        command, args = parse_commands(user_input)
-        # except TypeError:
-        #     print(f"Incorrect args provided for command")
-        # else:
-        command.execute(args)
+        try:
+            command, args = parse_commands(user_input)
+        except TypeError:
+            print(f"Incorrect args provided for command")
+        else:
+            command.execute(args)
