@@ -1,7 +1,7 @@
 from typing import TypedDict, Type
 from src.commands.command_base import Command, CommandArgs
 from src.commands.merge import MergeCommand, MergeCommandArgs
-from src.commands.import_df import ImportCommand, ImportCommandArgs2
+from src.commands.import_df import ImportCommand, ImportCommandArgs
 
 
 FactoryResult = TypedDict(
@@ -9,7 +9,7 @@ FactoryResult = TypedDict(
 
 COMMANDS: dict[str, FactoryResult] = {
     "merge": {'command': MergeCommand, 'args': MergeCommandArgs},
-    "import": {'command': ImportCommand, 'args': ImportCommandArgs2},
+    "import": {'command': ImportCommand, 'args': ImportCommandArgs},
     "_": {"command": Command, "args": CommandArgs}
 }
 
