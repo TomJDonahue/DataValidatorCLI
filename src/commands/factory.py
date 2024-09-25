@@ -2,6 +2,10 @@ from typing import TypedDict, Type
 from src.commands.command_base import Command, CommandArgs
 from src.commands.merge import MergeCommand, MergeCommandArgs
 from src.commands.import_df import ImportCommand, ImportCommandArgs
+from src.commands.exit import ExitCommand, ExitCommandArgs
+from src.commands.show_files import ShowFilesCommand, ShowFilesCommandArgs
+from src.commands.show_cols import ShowColsCommand, ShowColsCommandArgs
+from src.commands.drop_file import DropFileCommand, DropFileCommandArgs
 
 
 FactoryResult = TypedDict(
@@ -10,6 +14,10 @@ FactoryResult = TypedDict(
 COMMANDS: dict[str, FactoryResult] = {
     "merge": {'command': MergeCommand, 'args': MergeCommandArgs},
     "import": {'command': ImportCommand, 'args': ImportCommandArgs},
+    "exit": {'command': ExitCommand, 'args': ExitCommandArgs},
+    "files": {'command': ShowFilesCommand, 'args': ShowFilesCommandArgs},
+    "cols": {'command': ShowColsCommand, 'args': ShowColsCommandArgs},
+    "drop": {'command': DropFileCommand, 'args': DropFileCommandArgs},
     "_": {"command": Command, "args": CommandArgs}
 }
 

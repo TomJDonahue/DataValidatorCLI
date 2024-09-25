@@ -1,57 +1,4 @@
-from time import sleep
-from typing import Protocol
 from os.path import exists
-
-
-class Command(Protocol):
-    @staticmethod
-    def validate_args(args: list[str]):
-        ...
-
-    @staticmethod
-    def execute(args: list[str]):
-        ...
-
-    @staticmethod
-    def help():
-        ...
-
-
-class ExitCommand:
-    @staticmethod
-    def validate_args(_: list[str]):
-        return True
-
-    @staticmethod
-    def execute(_: list[str]):
-        for mark in ['.', '..', '...']:
-            print(mark)
-            sleep(.5)
-        quit()
-
-    @staticmethod
-    def help():
-        ...
-
-
-class ShowFilesCommand:
-    @staticmethod
-    def validate_args(_: list[str]):
-        # Confirm whether there are any files stored in the dataframes dictionary
-        if len(dataframes) == 0:
-            print("No files currently stored.")
-            return False
-        return True
-
-    @staticmethod
-    def execute(_: list[str]):
-        print("Files presently stored:")
-        for file in dataframes:
-            print(f'Alias: {file}')
-
-    @staticmethod
-    def help():
-        ...
 
 
 class FilterPrintCommand:
@@ -83,26 +30,6 @@ class FilterPrintCommand:
         ...
 
 
-class ShowColsCommand:
-    @staticmethod
-    def validate_args(args: list[str]):
-        # Confirm the minimum number of required arguments are passed.
-        if len(args) < 1:
-            return False
-        # Confirm the first arg is a file that exists in the dataframes dict
-        if args[0] not in dataframes:
-            return False
-        return True
-
-    @staticmethod
-    def execute(args: list[str]):
-        print(dataframes[args[0]].columns.values)
-
-    @staticmethod
-    def help():
-        ...
-
-
 class ShowDataCommand:
     @staticmethod
     def validate_args(args: list[str]):
@@ -126,31 +53,6 @@ class ShowDataCommand:
             print(dataframes[alias].head(head))
         else:
             print(dataframes[alias])
-
-    @staticmethod
-    def help():
-        ...
-
-
-class DropFileCommand:
-    @staticmethod
-    def validate_args(args: list[str]):
-        # Confirm the minimum number of arguments are provided
-        if len(args) < 1:
-            return False
-        # Confirm that the file exists in the dataframes
-        if args[0] not in dataframes:
-            return False
-        return True
-
-    @staticmethod
-    def execute(args: list[str]):
-        print('before')
-        print(dataframes)
-
-        dataframes.pop(args[0])
-        print('after')
-        print(dataframes)
 
     @staticmethod
     def help():

@@ -9,7 +9,6 @@ from src.commands.command_base import CommandArgs, Command
 class ImportCommandArgs(CommandArgs):
 
     def __init__(self, alias, path) -> None:
-        pass
         self.alias = alias
         self.path = path
 
