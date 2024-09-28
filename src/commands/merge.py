@@ -2,79 +2,44 @@ from src.commands.validations import value_exists_in_dataframes, cols_exists_in_
 import pandas as pd
 from src.data.dictionary import dataframes
 from src.commands.command_base import CommandArgs,Command
+from pydantic.dataclasses import dataclass
+from pydantic import model_validator, field_validator
+from dataclasses import field
 
 # TODO: This module still makes some direct calls to the dataframes dictionary. I want to abstract away from that.
+@dataclass
 class MergeCommandArgs(CommandArgs):
 
-    def __init__(self, file1, file2, left_on, right_on,alias, *cols) -> None:
-        pass
-        self.file1 = file1
-        self.file2 = file2
-        self.left_on = left_on
-        self.right_on = right_on
-        self.alias = alias
-        if cols == None:
-            self.cols = []
+    file1: str
+    file2: str
+    left_on: str
+    right_on: str
+    alias: str
+    cols: list[str] = field(default_factory=list)
+
+    @field_validator('file1', 'file2')
+    def validate_file_exists(cls, value):
+        if not value_exists_in_dataframes(value):
+            raise Exception("Value not present in Dataframes collection")
+        return value
+
+    @model_validator(mode='after')
+    def validate_cols_exist(self):
+        # TODO: Work on this
+        if not cols_exists_in_dataframe(self.file1, self.left_on):
+            raise Exception(f"{self.file1} does not have column {self.left_on}")
+        for col in [self.right_on,*self.cols]:
+            if not cols_exists_in_dataframe(self.file2,col):
+                raise Exception(f"{self.file2} does not have column {col}")
+        return self
+
+    @model_validator(mode='after')
+    def set_cols(self):
+        if len(self.cols) > 0:
+            self.cols.append(self.right_on)
         else:
-            self.cols = cols
-
-    @ property
-    def file1(self):
-        return self._file1
-
-    @ file1.setter
-    def file1(self, value):
-        if not value_exists_in_dataframes(value):
-            raise Exception("Value not present in Dataframes collection")
-        self._file1 = value
-
-    @ property
-    def file2(self):
-        return self._file2
-
-    @ file2.setter
-    def file2(self, value):
-        if not value_exists_in_dataframes(value):
-            raise Exception("Value not present in Dataframes collection")
-        self._file2 = value
-
-    @ property
-    def left_on(self):
-        return self._left_on
-
-    @ left_on.setter
-    def left_on(self, value):
-        if not cols_exists_in_dataframe(self.file1, value):
-            raise Exception(f"Left_on value {value} does not exist in {self.file1}")
-        self._left_on = value
-
-    @ property
-    def right_on(self):
-        return self._right_on
-
-    @ right_on.setter
-    def right_on(self, value):
-        if not cols_exists_in_dataframe(self.file2, value):
-            raise Exception(f"Right_on value {value} does not exist in {self.file2}")
-        self._right_on = value
-
-    @ property
-    def alias(self):
-        return self._alias
-
-    @ alias.setter
-    def alias(self, value):
-        self._alias = value
-
-    @ property
-    def cols(self):
-        return self._cols
-
-    @ cols.setter
-    def cols(self, value):
-        if not cols_exists_in_dataframe(self.file2, *value):
-            raise Exception(f"One or more of the following {value} does not exist in {self.file2}")
-        self._cols = list(value)
+            self.cols = dataframes[self.file2].columns.values.tolist()
+        return self
 
     def __repr__(self) -> str:
         return f'Merge Command Args: \nfile1: {self.file1} \nfile2: {self.file2} \nleft_on: {self.left_on} \nright_on: {self.right_on} \nalias: {self.alias} \ncols: {self.cols}'
@@ -83,13 +48,7 @@ class MergeCommandArgs(CommandArgs):
 class MergeCommand(Command):
 
     def execute(self,args: MergeCommandArgs): #type: ignore #TODO: Let's see if this works
-        file1, file2, left_on, right_on, alias = args.file1, args.file2, args.left_on, args.right_on, args.alias
-        if len(args.cols) > 0:
-            cols = args.cols
-            cols.append(right_on)
-        else:
-            cols = dataframes[file2].columns.values.tolist()
-            print(cols)
+        file1, file2, left_on, right_on, alias,cols = args.file1, args.file2, args.left_on, args.right_on, args.alias,args.cols
 
         suffixes = (None, '_duplicate')
 
