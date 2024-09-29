@@ -6,6 +6,7 @@ from src.commands.exit import ExitCommand, ExitCommandArgs
 from src.commands.show_files import ShowFilesCommand, ShowFilesCommandArgs
 from src.commands.show_cols import ShowColsCommand, ShowColsCommandArgs
 from src.commands.drop_file import DropFileCommand, DropFileCommandArgs
+from src.commands.show_data import ShowDataCommand, ShowDataCommandArgs
 
 
 FactoryResult = TypedDict(
@@ -18,6 +19,7 @@ COMMANDS: dict[str, FactoryResult] = {
     "files": {'command': ShowFilesCommand, 'args': ShowFilesCommandArgs},
     "cols": {'command': ShowColsCommand, 'args': ShowColsCommandArgs},
     "drop": {'command': DropFileCommand, 'args': DropFileCommandArgs},
+    "data": {'command': ShowDataCommand, 'args': ShowDataCommandArgs},
     "_": {"command": Command, "args": CommandArgs}
 }
 
