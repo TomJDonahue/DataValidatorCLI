@@ -12,26 +12,26 @@ class ShowDataCommandArgs(CommandArgs):
 
     model:Model
     alias: str
-    # TODO: I have a bug here with this
     num: int = -1
 
-    @model_validator(mode='after' )
+    @model_validator(mode='after')
     def validate_data_exists(self):
         if not value_exists_in_dataframes(self.model,self.alias):
             raise Exception(f"File {self.alias} not in dataframes")
         return self
     
-    @field_validator('num')
-    def validate_num(cls,value):
-        if value == -1:
-            value = maxsize
-        return value
+    @model_validator(mode='after')
+    def validate_num(self):
+        if self.num == -1:
+            self.num = maxsize
+        return self
 
     def __repr__(self) -> str:
-        return f'Drop File Command Args: \nalias: {self.alias}'
+        return f'Drop File Command Args: \nalias: {self.alias}\nnum: {self.num}'
 
 
 class ShowDataCommand(Command):
 
     def execute(self, args: ShowDataCommandArgs):  # type: ignore
+        print(args)
         print(args.model.read(args.alias,args.num))
