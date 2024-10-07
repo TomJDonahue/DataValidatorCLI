@@ -6,7 +6,6 @@ from pydantic.dataclasses import dataclass
 @dataclass
 class ExitCommandArgs(CommandArgs):
 
-    model:Model
     def __repr__(self) -> str:
         return f'Merge Command Args: None'
 

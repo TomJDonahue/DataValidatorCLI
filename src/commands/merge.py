@@ -2,7 +2,7 @@ from src.commands.validations import value_exists_in_dataframes, cols_exists_in_
 import pandas as pd
 from src.commands.command_base import CommandArgs,Command
 from pydantic.dataclasses import dataclass
-from pydantic import model_validator, field_validator
+from pydantic import model_validator
 from dataclasses import field
 
 # TODO: This module still makes some direct calls to the dataframes dictionary. I want to abstract away from that.

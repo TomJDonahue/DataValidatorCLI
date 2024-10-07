@@ -1,5 +1,4 @@
 from sys import maxsize
-from typing import Protocol
 from pandas import DataFrame
 from pydantic.dataclasses import dataclass
 from abc import ABC,abstractmethod

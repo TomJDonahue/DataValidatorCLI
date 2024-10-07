@@ -1,4 +1,3 @@
-from src.model.model import Model
 import pandas as pd
 from src.commands.command_base import CommandArgs, Command
 from pydantic import field_validator
@@ -11,7 +10,6 @@ from src.commands.validations import path_exists
 @dataclass
 class ImportCommandArgs(CommandArgs):
 
-    model:Model
     alias: str
     path: str
 

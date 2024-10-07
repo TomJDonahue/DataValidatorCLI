@@ -28,12 +28,13 @@ class Shell:
     def run(self):
         while True:
             user_input = input("tell me what you want ")
-            if user_input == "T":  # TODO: Remove this if block
-                quit()
             try:
                 command, args = _parse_commands(self.model,user_input)
             except TypeError as e:
-                print(f"Incorrect args provided for command")
-                print(e)
+                self.display_message(f"Incorrect args provided for command")
+                self.display_message(e)
             else:
                 command.execute(args)
+    
+    def display_message(self,message):
+        print(message)

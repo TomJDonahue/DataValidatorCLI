@@ -1,8 +1,8 @@
-from src.model.model import Model
 from src.commands.validations import value_exists_in_dataframes
 from src.commands.command_base import CommandArgs, Command
+from src.controller.events import raise_event
 from pydantic.dataclasses import dataclass
-from pydantic import model_validator,field_validator
+from pydantic import model_validator
 from sys import maxsize
 
 # TODO: This module still makes some direct calls to the dataframes dictionary. I want to abstract away from that.
@@ -10,7 +10,6 @@ from sys import maxsize
 @dataclass
 class ShowDataCommandArgs(CommandArgs):
 
-    model:Model
     alias: str
     num: int = -1
 
@@ -33,5 +32,4 @@ class ShowDataCommandArgs(CommandArgs):
 class ShowDataCommand(Command):
 
     def execute(self, args: ShowDataCommandArgs):  # type: ignore
-        print(args)
-        print(args.model.read(args.alias,args.num))
+        raise_event('data',args.model.read(args.alias,args.num))

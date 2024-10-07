@@ -1,23 +1,23 @@
 import pandas as pd  # TODO: Remove This
 from src.model.dictionary import DataDictionary
 from src.view.shell_view import Shell
-from src.controller.controller import Controller
+from src.controller.shell_controller import ShellController
 
 
 
 
 if __name__ == "__main__":
     # TODO: This is just for ease of testing
-    data = DataDictionary()
+    model = DataDictionary()
     
-    data.create('file4', pd.read_csv('file1.csv'))
-    data.create('file5', pd.read_csv('file2.csv'))
+    model.create('file4', pd.read_csv('file1.csv'))
+    model.create('file5', pd.read_csv('file2.csv'))
 
-    print(data.read('file5'))
+    print(model.read('file5'))
 
-    view = Shell(data)
+    view = Shell(model)
 
-    controller = Controller(data, view)
+    controller = ShellController(model, view)
 
 
 # So a controller controls user input and writes out to the model. The view reads from the model.

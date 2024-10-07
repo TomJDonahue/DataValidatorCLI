@@ -1,6 +1,3 @@
-from src.model.model import Model
-from os.path import exists
-import pandas as pd
 from src.commands.command_base import CommandArgs, Command
 from pydantic.dataclasses import dataclass
 
@@ -8,8 +5,6 @@ from pydantic.dataclasses import dataclass
 
 @dataclass
 class ShowFilesCommandArgs(CommandArgs):
-
-    model:Model
 
     def __repr__(self) -> str:
         return f'Show Files Command Args: None'
