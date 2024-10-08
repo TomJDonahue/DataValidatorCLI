@@ -9,9 +9,6 @@ def _parse_commands(model:Model,commands: str) -> tuple[Command, CommandArgs]:
     arguments = [args for args in split_commands[1:] if args != '']
     print(f'Debug(parse_commands): Arguments: {arguments}')
     command, arguments = factory.generate_cmd_and_args(model, command, arguments)
-# TODO incorporate Help
-    # if arguments and arguments[0] == '-h':
-    #     return commands, ['-h']
 
     return command, arguments
 

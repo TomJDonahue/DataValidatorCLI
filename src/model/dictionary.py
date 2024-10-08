@@ -1,8 +1,9 @@
+from src.model.model import Model
+
 from sys import maxsize
 from pandas import DataFrame
 from pydantic.dataclasses import dataclass
 from dataclasses import field
-from src.model.model import Model
 
 
 @dataclass

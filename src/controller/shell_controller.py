@@ -1,7 +1,7 @@
 from src.controller.controller import Controller
+from src.controller.events import register_event
 from src.view.view import View
 from src.commands.factory import COMMANDS
-from src.controller.events import register_event
 
 class ShellController(Controller):
     def __init__(self, model, view: View) -> None:

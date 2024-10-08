@@ -1,6 +1,8 @@
 from src.commands.validations import value_exists_in_dataframes, cols_exists_in_dataframe
-import pandas as pd
+from src.controller.events import raise_event
 from src.commands.command_base import CommandArgs,Command
+
+import pandas as pd
 from pydantic.dataclasses import dataclass
 from pydantic import model_validator
 from dataclasses import field
@@ -42,10 +44,6 @@ class MergeCommandArgs(CommandArgs):
             self.cols = self.model.read(self.file2).columns.values.tolist()
         return self
 
-    def __repr__(self) -> str:
-        return f'Merge Command Args: \nfile1: {self.file1} \nfile2: {self.file2} \nleft_on: {self.left_on} \nright_on: {self.right_on} \nalias: {self.alias} \ncols: {self.cols}'
-
-
 class MergeCommand(Command):
 
     def execute(self,args: MergeCommandArgs): #type: ignore #TODO: Let's see if this works
@@ -58,6 +56,6 @@ class MergeCommand(Command):
 
         drop_cols = [col for col in file.columns if col.endswith("_duplicate")]
         file.drop(columns=drop_cols, inplace=True)
-        print(file)
+        raise_event('merge',file)
         args.model.create(alias,file)
 

@@ -18,7 +18,3 @@ if __name__ == "__main__":
     view = Shell(model)
 
     controller = ShellController(model, view)
-
-
-# So a controller controls user input and writes out to the model. The view reads from the model.
-# So a shell controller would spawn a shell view. A Tkinter controller would spawn a tkinter view. etc.

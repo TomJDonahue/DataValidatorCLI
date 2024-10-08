@@ -1,4 +1,3 @@
-from typing import TypedDict, Type
 from src.model.model import Model
 from src.commands.command_base import Command, CommandArgs
 from src.commands.merge import MergeCommand, MergeCommandArgs
@@ -9,6 +8,7 @@ from src.commands.show_cols import ShowColsCommand, ShowColsCommandArgs
 from src.commands.drop_file import DropFileCommand, DropFileCommandArgs
 from src.commands.show_data import ShowDataCommand, ShowDataCommandArgs
 
+from typing import TypedDict, Type
 
 FactoryResult = TypedDict(
     'FactoryResult', {'command': Type[Command], 'args': Type[CommandArgs]})

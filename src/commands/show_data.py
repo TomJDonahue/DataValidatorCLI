@@ -1,6 +1,7 @@
 from src.commands.validations import value_exists_in_dataframes
 from src.commands.command_base import CommandArgs, Command
 from src.controller.events import raise_event
+
 from pydantic.dataclasses import dataclass
 from pydantic import model_validator
 from sys import maxsize
@@ -24,9 +25,6 @@ class ShowDataCommandArgs(CommandArgs):
         if self.num == -1:
             self.num = maxsize
         return self
-
-    def __repr__(self) -> str:
-        return f'Drop File Command Args: \nalias: {self.alias}\nnum: {self.num}'
 
 
 class ShowDataCommand(Command):

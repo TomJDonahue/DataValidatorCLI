@@ -5,7 +5,6 @@ events: dict[str,list[Callable]] = {}
 
 def clear_events():
     events.clear()
-    print(events)
 
 def register_event(event: str, listener: Callable):
     if event not in events:
@@ -20,4 +19,4 @@ def raise_event(event:str,event_args):
         for listener in events[event]:
             listener(event_args)
     else:
-        print(f"No listeners in event {event}")
+        print(f"No event {event}")

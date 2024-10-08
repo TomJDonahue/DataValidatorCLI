@@ -1,5 +1,7 @@
 from src.commands.validations import value_exists_in_dataframes
 from src.commands.command_base import CommandArgs, Command
+from src.controller.events import raise_event
+
 from pydantic.dataclasses import dataclass
 from pydantic import model_validator
 
@@ -16,11 +18,7 @@ class ShowColsCommandArgs(CommandArgs):
             raise Exception(f"File {self.alias} not in dataframes")
         return self
 
-    def __repr__(self) -> str:
-        return f'Show Cols Command Args: \nalias: {self.alias}'
-
-
 class ShowColsCommand(Command):
 
     def execute(self, args: ShowColsCommandArgs):  # type: ignore
-        print(args.model.read(args.alias).columns.values)
+        raise_event('cols',args.model.read(args.alias).columns.values)
