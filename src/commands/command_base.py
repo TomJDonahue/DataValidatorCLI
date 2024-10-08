@@ -1,7 +1,11 @@
-from abc import ABC,abstractmethod
+from src.model.model import Model
 
-class CommandArgs(ABC):
-    ...
+from abc import ABC,abstractmethod
+from pydantic.dataclasses import dataclass
+
+@dataclass
+class CommandArgs:
+    model:Model
 
 class Command(ABC):
     

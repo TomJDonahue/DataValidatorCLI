@@ -1,12 +1,20 @@
-from src.shell.core import run_shell
 import pandas as pd  # TODO: Remove This
-from src.data.dictionary import dataframes  # TODO: Remove This
+from src.model.dictionary import DataDictionary
+from src.view.shell_view import Shell
+from src.controller.shell_controller import ShellController
+
+
 
 
 if __name__ == "__main__":
     # TODO: This is just for ease of testing
-    dataframes['file4'] = pd.read_csv('file1.csv')
-    dataframes['file5'] = pd.read_csv('file2.csv')
+    model = DataDictionary()
+    
+    model.create('file4', pd.read_csv('file1.csv'))
+    model.create('file5', pd.read_csv('file2.csv'))
 
-    run_shell()
+    print(model.read('file5'))
 
+    view = Shell(model)
+
+    controller = ShellController(model, view)

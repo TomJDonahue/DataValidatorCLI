@@ -1,7 +1,9 @@
-from src.data.dictionary import dataframes
+from src.controller.events import raise_event
+from src.commands.validations import value_exists_in_dataframes
 from src.commands.command_base import CommandArgs, Command
+
 from pydantic.dataclasses import dataclass
-from pydantic import field_validator
+from pydantic import model_validator
 
 # TODO: This module still makes some direct calls to the dataframes dictionary. I want to abstract away from that.
 
@@ -10,22 +12,16 @@ class DropFileCommandArgs(CommandArgs):
 
     alias: str
 
-    @field_validator('alias')
-    def validate_data_exists(cls, value):
-        if value not in dataframes:
-            raise Exception(f"File {value} not in dataframes")
-        return value
-    
-    def __repr__(self) -> str:
-        return f'Drop File Command Args: \nalias: {self.alias}'
+    @model_validator(mode='after')
+    def validate_data_exists(self):
+        if not value_exists_in_dataframes(self.model,self.alias):
+            raise Exception(f"File {self.alias} not in dataframes")
+        return self
 
 
 class DropFileCommand(Command):
 
     def execute(self, args: DropFileCommandArgs):  # type: ignore
-        print('before')
-        print(dataframes)
-
-        del dataframes[args.alias]
-        print('after')
-        print(dataframes)
+        raise_event('drop',f"Dropping {args.alias}")
+        args.model.delete(args.alias)
+        raise_event('drop',f"Remaining files: {args.model.get_table_names()}")
