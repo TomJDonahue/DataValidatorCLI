@@ -4,10 +4,10 @@ from src.commands.command_base import CommandArgs,Command
 
 import pandas as pd
 from pydantic.dataclasses import dataclass
-from pydantic import model_validator
+from pydantic import field_validator, model_validator
 from dataclasses import field
+from inspect import signature
 
-# TODO: This module still makes some direct calls to the dataframes dictionary. I want to abstract away from that.
 @dataclass
 class MergeCommandArgs(CommandArgs):
 
@@ -16,7 +16,16 @@ class MergeCommandArgs(CommandArgs):
     left_on: str
     right_on: str
     alias: str
-    cols: list[str] = field(default_factory=list)
+    cols: list[str] | str = field(default_factory=list)
+
+    
+    @field_validator('cols')
+    def validate_cols(cls, value):
+        print(value)
+        if not isinstance(value,list):
+            value = value.split(',')
+        print(value)
+        return value
 
     @model_validator(mode='after')
     def validate_file_exists(self):
@@ -28,7 +37,6 @@ class MergeCommandArgs(CommandArgs):
 
     @model_validator(mode='after')
     def validate_cols_exist(self):
-        # TODO: Work on this
         if not cols_exists_in_dataframe(self.model,self.file1, self.left_on):
             raise Exception(f"{self.file1} does not have column {self.left_on}")
         for col in [self.right_on,*self.cols]:
@@ -46,7 +54,7 @@ class MergeCommandArgs(CommandArgs):
 
 class MergeCommand(Command):
 
-    def execute(self,args: MergeCommandArgs): #type: ignore #TODO: Let's see if this works
+    def execute(self,args: MergeCommandArgs): #type: ignore
         file1, file2, left_on, right_on, alias,cols = args.file1, args.file2, args.left_on, args.right_on, args.alias,args.cols
 
         suffixes = (None, '_duplicate')

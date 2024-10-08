@@ -11,7 +11,7 @@ class ExitCommandArgs(CommandArgs):
 
 class ExitCommand(Command):
 
-    def execute(self,_: ExitCommandArgs): #type: ignore #TODO: Let's see if this works
+    def execute(self,_: ExitCommandArgs): #type: ignore
         for mark in ['.', '..', '...']:
             raise_event('exit',mark)
             sleep(.5)

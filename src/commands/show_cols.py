@@ -5,7 +5,6 @@ from src.controller.events import raise_event
 from pydantic.dataclasses import dataclass
 from pydantic import model_validator
 
-# TODO: This module still makes some direct calls to the dataframes dictionary. I want to abstract away from that.
 
 @dataclass
 class ShowColsCommandArgs(CommandArgs):

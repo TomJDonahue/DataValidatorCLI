@@ -7,16 +7,10 @@ def _parse_commands(model:Model,commands: str) -> tuple[Command, CommandArgs]:
     split_commands = commands.split()
     command = split_commands[0]
     arguments = [args for args in split_commands[1:] if args != '']
-    print(f'Debug(parse_commands): Arguments: {arguments}')
     command, arguments = factory.generate_cmd_and_args(model, command, arguments)
 
     return command, arguments
 
-
-def _validate_help(args: list[str]):
-    if len(args) > 0 and args[0] == '-h':
-        return True
-    return False
 
 class Shell:
     def __init__(self, model: Model) -> None:
