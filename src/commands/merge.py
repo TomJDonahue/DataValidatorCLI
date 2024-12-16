@@ -1,10 +1,11 @@
+from typing import Annotated
 from src.commands.validations import value_exists_in_dataframes, cols_exists_in_dataframe
 from src.controller.events import raise_event
 from src.commands.command_base import CommandArgs,Command
 
 import pandas as pd
 from pydantic.dataclasses import dataclass
-from pydantic import field_validator, model_validator
+from pydantic import SkipValidation, field_validator, model_validator
 from dataclasses import field
 from inspect import signature
 
@@ -16,15 +17,13 @@ class MergeCommandArgs(CommandArgs):
     left_on: str
     right_on: str
     alias: str
-    cols: list[str] | str = field(default_factory=list)
+    cols: SkipValidation[list[str]]  = field(default_factory=list)
 
     
     @field_validator('cols')
     def validate_cols(cls, value):
-        print(value)
         if not isinstance(value,list):
             value = value.split(',')
-        print(value)
         return value
 
     @model_validator(mode='after')

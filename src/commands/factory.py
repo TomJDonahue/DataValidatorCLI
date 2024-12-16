@@ -1,3 +1,5 @@
+import inspect
+from pprint import pprint
 from src.model.model import Model
 from src.commands.command_base import Command, CommandArgs
 from src.commands.merge import MergeCommand, MergeCommandArgs
@@ -8,7 +10,7 @@ from src.commands.show_cols import ShowColsCommand, ShowColsCommandArgs
 from src.commands.drop_file import DropFileCommand, DropFileCommandArgs
 from src.commands.show_data import ShowDataCommand, ShowDataCommandArgs
 
-from typing import TypedDict, Type
+from typing import List, Sequence, TypedDict, Type, Union
 
 FactoryResult = TypedDict(
     'FactoryResult', {'command': Type[Command], 'args': Type[CommandArgs]})
@@ -25,9 +27,14 @@ COMMANDS: dict[str, FactoryResult] = {
 }
 
 
-def generate_cmd_and_args(model: Model, cmd_str: str, args: list[str]) -> tuple[Command, CommandArgs]:
+def generate_cmd_and_args(model: Model, cmd_str: str, args: list) -> tuple[Command, CommandArgs]:
     if cmd_str not in COMMANDS:
         raise Exception(f"Command {cmd_str} does not exist.")
+    expected_args = len(inspect.signature(COMMANDS[cmd_str]['args']).parameters)-1
+    if expected_args < len(args):
+        list_args = [arg for arg in args[expected_args-1:]]
+        args = args[:expected_args-1]
+        args.append(list_args)
     _command = COMMANDS[cmd_str]['command']()
     _args = COMMANDS[cmd_str]['args'](model,*args)
     return _command, _args
