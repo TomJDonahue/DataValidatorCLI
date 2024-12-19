@@ -18,7 +18,9 @@ def merge(
 ) -> None:
     validate_alias_exists(model, file1)
     validate_alias_exists(model, file2)
-
+    if not isinstance(cols,list):
+        cols = [cols]
+        
     if len(cols) > 0:
         cols.append(right_on)
     else:
