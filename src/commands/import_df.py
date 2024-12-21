@@ -1,29 +1,13 @@
-from src.commands.command_base import CommandArgs, Command
-from src.commands.validations import path_exists
-from src.controller.events import raise_event
-
 import pandas as pd
-from pydantic import field_validator
-from pydantic.dataclasses import dataclass
+from commands.validations import validate_path_exists
+from events import raise_event
+
+from .model import Model
 
 
-@dataclass
-class ImportCommandArgs(CommandArgs):
+def import_df(model: Model, alias: str, path: str) -> None:
+    validate_path_exists(path)
 
-    alias: str
-    path: str
-
-    @field_validator('path')
-    def validate_path(cls, value):
-        if not path_exists(value):
-            raise Exception(f"File not found at path: {value}")
-        return value
-
-
-
-class ImportCommand(Command):
-
-    def execute(self, args: ImportCommandArgs):  # type: ignore
-        df = pd.read_csv(args.path)
-        args.model.create(args.alias,df)
-        raise_event('import',"Imported!")
+    df = pd.read_csv(path)
+    model.create(alias, df)
+    raise_event("import", "Imported!")
