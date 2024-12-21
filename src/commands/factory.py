@@ -8,17 +8,21 @@ from .merge import merge
 from .show_cols import show_cols
 from .show_data import show_data
 from .show_files import show_files
+from .rename_file import rename_file
+from .import_all import import_all
 
 type CommandFn = Callable[..., None]
 
 COMMANDS: dict[str, CommandFn] = {
     "merge": merge,
     "import": import_df,
+    "importall": import_all,
     "exit": exit_app,
     "files": show_files,
     "cols": show_cols,
     "drop": drop_file,
     "data": show_data,
+    "rename": rename_file,
 }
 
 

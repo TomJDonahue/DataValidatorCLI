@@ -27,7 +27,8 @@ class Command:
                     parsed_args[i] = arg
             except ValueError:
                 pass
-        # If extra optional arguments are added (as in the case of the merge command), the parser converts the final arguments into a list.
+        # If extra optional arguments are added (as in the case of the merge command),
+        # the parser converts the final arguments into a list.
         expected_args: int = cmd_expected_args(cmd)
         if expected_args < len(parsed_args):
             grouped_args = [str(arg) for arg in parsed_args[expected_args-1:]]
