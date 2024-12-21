@@ -29,5 +29,6 @@ def cmd_exists(cmd: str) -> bool:
 def execute_cmd(cmd: str, *args: Any) -> None:
     COMMANDS[cmd](*args)
 
+
 def cmd_expected_args(cmd: str) -> int:
     return len(inspect.signature(COMMANDS[cmd]).parameters)-1

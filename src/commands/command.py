@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from commands.factory import cmd_exists, execute_cmd,cmd_expected_args
+from commands.factory import cmd_exists, execute_cmd, cmd_expected_args
 from commands.model import Model
 
 
@@ -33,7 +33,7 @@ class Command:
             grouped_args = [str(arg) for arg in parsed_args[expected_args-1:]]
             parsed_args = [arg for arg in parsed_args[:expected_args-1]]
             parsed_args.append(grouped_args)
-            
+
         return Command(cmd, parsed_args)
 
     def execute(self, model: Model) -> None:

@@ -1,6 +1,7 @@
 from commands.command import Command
 from commands.model import Model
 
+
 class Shell:
     def __init__(self, model: Model) -> None:
         self.model = model
