@@ -12,6 +12,8 @@ class Shell:
             try:
                 command = Command.from_string(user_input)
                 command.execute(self.model)
+            except ValueError as e:
+                self.display_log(e)
             except TypeError as e:
                 self.display_message("Incorrect args provided for command")
                 self.display_log(e)
