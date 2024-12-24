@@ -1,12 +1,13 @@
 import pandas as pd
-from commands.validations import validate_path_exists
+from commands.validations import validate_path_exists, validate_file_ext
 from events import raise_event
 
 from .model import Model
 
 
-def import_df(model: Model, alias: str, path: str) -> None:
+def import_csv(model: Model, alias: str, path: str) -> None:
     validate_path_exists(path)
+    validate_file_ext(path, '.csv')
 
     df = pd.read_csv(path)
     model.create(alias, df)

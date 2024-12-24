@@ -1,4 +1,3 @@
-from typing import Callable
 from .model import Model
 from .validations import validate_path_exists
 from events import raise_event
@@ -31,7 +30,7 @@ def import_all(model: Model, file_path: str | None = None) -> None:
                 df = exts[ext](file)
                 model.create(alias, df)
                 file_msg += f"\n - {file} imported as {alias}"
-            except ValueError as e:
+            except (ValueError, ImportError) as e:
                 file_msg += f"\n - Failed to import {file} due to:\n   - {e}"
 
     raise_event("import_all", f"Import Results: {file_msg}")
