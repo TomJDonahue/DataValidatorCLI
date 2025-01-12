@@ -1,6 +1,8 @@
 import pandas as pd
 from commands.validations import validate_file_ext, validate_path_exists
 from events import raise_event
+from os import path as ospath
+from settings import settings
 
 from .model import Model
 
@@ -21,6 +23,7 @@ def import_xl(model: Model, alias: str, path: str, sheet: int | None = None) -> 
         sheet: [Optional] The sheet number to import, as arranged in the Excel document.
                 If no value is provided, the command will import all sheets.
     '''
+    path = ospath.join(settings['cwd'], path)
     validate_path_exists(path)
     validate_file_ext(path, '.xlsx')
 

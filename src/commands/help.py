@@ -2,7 +2,7 @@ from .model import Model
 from events import raise_event
 
 
-def help(_: Model, cmd: str):
+def help(_: Model, cmd: str) -> None:
     from .factory import COMMANDS
     if cmd not in COMMANDS:
         raise ValueError(f"{cmd} is not a valid command.")

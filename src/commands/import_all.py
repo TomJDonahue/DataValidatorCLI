@@ -1,9 +1,10 @@
 from .model import Model
 from .validations import validate_path_exists
 from events import raise_event
+from settings import settings
 
 from glob import glob
-from os import path, getcwd
+from os import path
 import pandas as pd
 
 
@@ -14,7 +15,7 @@ def import_all(model: Model, file_path: str | None = None) -> None:
             }
 
     if file_path == None:
-        file_path = getcwd()
+        file_path = settings['cwd']
 
     validate_path_exists(file_path)
 
