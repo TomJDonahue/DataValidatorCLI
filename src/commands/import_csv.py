@@ -11,4 +11,4 @@ def import_csv(model: Model, alias: str, path: str) -> None:
 
     df = pd.read_csv(path)
     model.create(alias, df)
-    raise_event("import", "Imported!")
+    raise_event("import", f"Imported: {alias}")

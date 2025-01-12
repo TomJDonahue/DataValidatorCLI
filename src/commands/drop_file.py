@@ -5,8 +5,8 @@ from .model import Model
 
 
 def drop_file(model: Model, alias: str) -> None:
-    print(f"Drop file {alias}")
-    print(model.get_table_names())
+    raise_event("drop", f"Drop file {alias}")
+    raise_event("drop", model.get_table_names())
     validate_alias_exists(model, alias)
 
     raise_event("drop", f"Dropping {alias}")

@@ -12,6 +12,7 @@ from .show_files import show_files
 from .rename_file import rename_file
 from .import_all import import_all
 from .import_xl import import_xl
+from .help import help
 
 type CommandFn = Callable[..., None]
 
@@ -26,6 +27,7 @@ COMMANDS: dict[str, CommandFn] = {
     "drop": drop_file,
     "data": show_data,
     "rename": rename_file,
+    "help": help,
 }
 
 

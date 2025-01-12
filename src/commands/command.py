@@ -3,6 +3,8 @@ from dataclasses import dataclass
 from commands.factory import cmd_exists, execute_cmd, cmd_expected_args
 from commands.model import Model
 
+HELP_ARGS = ['help', '--help', '-h', '--h']
+
 
 @dataclass
 class Command:
@@ -12,6 +14,10 @@ class Command:
     @staticmethod
     def from_string(command: str) -> "Command":
         parts = command.split()
+        if len(parts) >= 2 and parts[1] in HELP_ARGS:
+            cmd: str = "help"
+            args: list[str | int | list[str]] = [parts[0]]
+            return Command(cmd, args)
         cmd, raw_args = parts[0], parts[1:]
 
         if not cmd_exists(cmd):
