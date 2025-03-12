@@ -1,13 +1,14 @@
 [project]
-name = "dataroast"
+name = "DataValidatorCLI"
 version = "0.1.0"
-description = "Refactor of data validator"
+description = "CLI tool for data validation"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "pandas>=2.2.3",
     "pytest>=8.3.3",
     "openpyxl>=3.1.5",
+    "duckdb>=1.1.3",
 ]
 
 [tool.pytest.ini_options]

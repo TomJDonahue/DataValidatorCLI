@@ -14,6 +14,7 @@ from .import_all import import_all
 from .import_xl import import_xl
 from .help import help
 from .set_dir import set_dir
+from .sql import sql
 
 type CommandFn = Callable[..., None]
 
@@ -30,6 +31,7 @@ COMMANDS: dict[str, CommandFn] = {
     "rename": rename_file,
     "help": help,
     "setdir": set_dir,
+    "sql": sql,
 }
 
 
